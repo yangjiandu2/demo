@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>动态图片切换</title>
+        <meta charset="UTF-8">
+        <link href="css/style.css" rel="stylesheet">
+        
+    </head>
+    <body>
+        <!-- 游戏区域 -->
+        <div id="container">
+            <img src="images/dice_1.png" id="dice" alt="">
+        </div>
+        <div id="command">
+            <input id="btn" type="button" value="摇一摇">
+        </div>
+    </body>
+</html>
+<script src="../../public.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+//随机数
+		function getRand(minNum,maxNum){
+		return parseInt(Math.random()*(maxNum-minNum)+1)+minNum;
+		}
+		
+		
+	var img=document.getElementsByTagName("img")[0];
+	var btn=$id("btn");
+	
+	btn.onclick=function(){
+		img.src="images/diceDynamic.gif";	
+		setTimeout(function(){
+			var rand=getRand(1,6);
+			img.src="images/dice_"+rand+".png";	
+		},1000);
+	}
+	
+	
+	
+	
+	
+	
+</script>
