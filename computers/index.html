@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				background: black;
+			}
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			div{
+				width: 300px;
+				border: 1px solid black;
+				margin: auto;
+				background: #F1F1F1;
+				padding: 5px;
+			}
+			ul{
+				list-style: none;
+			}
+			li button:first-child{
+				margin-left: 2px;
+			}
+			button{
+				width: 70px;
+				height: 35px;
+				margin: 5px 0;
+			}
+			input{
+				height: 50px;
+				width: 100%;
+				background: yellowgreen;
+				font-size: 20px;
+				border: none;
+				text-align: right;
+			}
+			input:first-child{
+				display: none;
+				background: blue;
+				color: white;
+				height: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<ul>
+				<li>
+					<input type="text" id="result" placeholder=""/>
+					<input type="text" id="textVal" placeholder="0"/>
+				</li>
+				<li>
+					<button onclick="claerAll()">清除</button>
+					<button onclick="delCh()">←</button>
+					<button onclick="jsResult()">=</button>
+					<button onclick="jiSuan(this)">+</button>
+				</li>
+				<li>
+					<button onclick="innerNum(this)">1</button>
+					<button onclick="innerNum(this)">2</button>
+					<button onclick="innerNum(this)">3</button>
+					<button onclick="jiSuan(this)">-</button>
+				</li>
+				<li>
+					<button onclick="innerNum(this)">4</button>
+					<button onclick="innerNum(this)">5</button>
+					<button onclick="innerNum(this)">6</button>
+					<button onclick="jiSuan(this)">*</button>
+				</li>
+				<li>
+					<button onclick="innerNum(this)">7</button>
+					<button onclick="innerNum(this)">8</button>
+					<button onclick="innerNum(this)">9</button>
+					<button onclick="jiSuan(this)">/</button>
+				</li>
+				<li>
+					<button onclick="innerNum(this)">0</button>
+					<button onclick="jiSuan(this)">.</button>
+					<button onclick="jiSuan(this)">(</button>
+					<button onclick="jiSuan(this)">)</button>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script src="public.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+		function innerNum(obj){
+			$id("textVal").value += obj.innerHTML;
+		}
+		var h=0;
+		function jiSuan(obj){
+			if($id("textVal").value!=""){
+				$id("result").value +=$id("textVal").value+obj.innerHTML;
+				//清除原来的textVal值
+				$id("textVal").value="";
+				$id("result").style.display="block";
+				//当$做id("textVal").value没有值的时候不需要动画操作
+				//当$id("result").value值小于50的时候才做动画
+				if(h<50){
+					
+					animate()
+				}
+			}
+		}
+		//实现退格
+		function delCh(){
+			if($id("textVal").value!=""){
+				var tVal=$id("textVal").value;
+				$id("textVal").value=tVal.substr(0,tVal.length-1);
+			}
+		}
+		//实现清除功能
+		function claerAll(){
+			$id("textVal").value="";
+			$id("result").value="";
+		    $id("result").height="0";
+		    $id("result").style.display="none";
+		    h=0;
+		}
+		//弹窗缓慢动画
+		function animate(){	
+			var timer=setInterval(function(){
+				h++;
+				$id("result").style.height=h+"px";
+				if(h==50){
+					clearInterval(timer);
+				}
+			},1);
+			
+		}
+		
+		function jsResult(){
+			if($id("textVal").value!=""){
+				//处理不可以控的错误
+				try{
+			    $id("textVal").value=eval($id("result").value+$id("textVal").value); 
+				}catch(err){//上面出错时运行
+					$id("textVal").value="";
+				}
+			    $id("result").value="";
+			    $id("result").height="0";
+			    $id("result").style.display="none";
+			    h=0;
+			}	
+		}
+/*		
+		var str="2+6";
+		alert(eval(str))
+		*/
+</script>
