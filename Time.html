@@ -3,6 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style type="text/css">
+			body{
+			   text-align: center;
+			}
+		</style>
 	</head>
 	<body>
 		<h1 id="showTime"></h1>
@@ -24,7 +29,7 @@ function $id(id){
 	
 	
 	//设置活动结束时间
-	var endTime=new Date("2018/1/26 08:00:00");
+	var endTime=new Date("2019/1/26 08:00:00");
 	//设置时间差
 	var s=diff(startTime,endTime);
 
@@ -38,10 +43,9 @@ function $id(id){
 		var d=parseInt(houre/24);
 		var h=parseInt((houre/24-d)*24)
 		var f=parseInt(((houre/24-d)*24-h)*60);
-		var m=parseInt((((houre/24-d)*24-h)*60-f)*60);
-		
+		var m=parseInt((((houre/24-d)*24-h)*60-f)*60);	
 		$id("showTime").innerHTML="距离放寒假还有"+d+"天"+h+"时"+f+"分"+m+"秒";
-    $id("showTime").style.color="red";
+                $id("showTime").style.color="red";
 	}
 	showTime();
 	 var time=setInterval(function(){
