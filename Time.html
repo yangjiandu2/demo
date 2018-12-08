@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h1 id="showTime"></h1>
+	</body>
+</html>
+<script type="text/javascript">
+//获取ID
+function $id(id){
+ 			return document.getElementById(id);
+ 		}
+
+//获取从某日到某日的秒数
+	function diff(startTime,endTime){
+	   return (endTime.getTime()-startTime.getTime())/1000;
+	}
+//案例商品倒计时：
+	//设置活动开始时间
+	var startTime=new Date();
+	
+	
+	//设置活动结束时间
+	var endTime=new Date("2018/1/26 08:00:00");
+	//设置时间差
+	var s=diff(startTime,endTime);
+
+	function showTime(){
+		if(s<0){
+		$id("showTime").innerHTML="<span style='color: red;'>活动时间到，商品已经过期！</span>"
+		return;
+		}
+		console.log(s/3600/24/12);
+		var houre=s/3600;
+		var d=parseInt(houre/24);
+		var h=parseInt((houre/24-d)*24)
+		var f=parseInt(((houre/24-d)*24-h)*60);
+		var m=parseInt((((houre/24-d)*24-h)*60-f)*60);
+		
+		$id("showTime").innerHTML="距离放寒假还有"+d+"天"+h+"时"+f+"分"+m+"秒";
+    $id("showTime").style.color="red";
+	}
+	showTime();
+	 var time=setInterval(function(){
+		s--;
+		if(s<0){
+		clearInterval(time);
+		}
+		showTime();
+		console.log(s)
+	},1000);
+	
+	
+	
+</script>
