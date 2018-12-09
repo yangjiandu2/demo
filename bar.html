@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin:0;
+				padding: 0;
+			}
+			#prent{
+				width:650px;
+				height: 30px;
+				margin:100px auto;
+				position: relative;
+			}
+			#box{
+				width:600px;
+				height: 30px;
+				background: #ccc;
+				position: absolute;
+				border-radius:8px 0 0 8px;
+			}
+			#bar{
+				width:;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				left:0;
+				background:orangered;
+				border-radius:8px 0 0 8px;
+			}
+			#block{
+				width:20px;
+				height:45px;
+				position: absolute;
+				top:-7px;
+				left:0;
+				background:orangered;
+				border-radius:5px ;
+				cursor:pointer;
+			}
+			#mask{
+				position: absolute;
+				right:5px;
+				top: 3px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="prent">
+			<div id="box">
+				<div id="bar">
+					<div id="block">
+						
+					</div>
+				</div>
+			</div>
+			<span id="mask">
+				0%
+			</span>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	//获取ID
+function $id(id){
+ 			return document.getElementById(id);
+ 		}
+
+	//获取所有标签
+	var box=$id("box");//灰色颜色条
+	var bar=$id("bar");//颜色条
+	var block=$id("block");//块
+	var mask=$id("mask");//百分比
+	var prent=$id("prent");
+	//让块移动起来
+	block.onmousedown=function(){
+		document.onmousemove=function(e){
+			var x=e.clientX-prent.offsetLeft;
+			var e = e || event;
+			
+			//边界处理
+			if(x<0){
+				x=0
+			}else if(x>=box.offsetWidth-block.offsetWidth){
+				x=box.offsetWidth-block.offsetWidth;
+			}
+			bar.style.width=x+"px"
+			block.style.left=x+"px";
+			//console.log(x);
+			//设置百分几
+			var w=x+block.offsetWidth;
+			mask.innerHTML=Math.ceil((w/box.offsetWidth)*100)+"%";
+			return false;	
+		}
+		document.onmouseup=function(e){
+			document.onmousemove=null;
+		}
+	}
+	
+	
+	
+</script>
