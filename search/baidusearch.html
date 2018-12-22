@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#box{
+				width: 330px;
+				margin: auto;
+				margin-top: 200px;
+			}
+			#baidu{
+				height: 30px;
+				width: 250px;
+			}
+			#btn{
+				height: 30px;
+				width: 70px;
+			}
+			ul{
+				width: 230px;
+				border: 1px solid black;
+				border-top: none;
+				list-style: none;
+				padding: 10px;
+				padding-top: 0;
+				display: none;
+			}
+			ul li{
+				margin: 5px;
+			}
+			ul li:hover{
+				background: #ccc;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<input type="text" id="baidu" value="" /><input type="button" id="btn" value="百度一下" />
+			<ul id="oul">
+				<!--<li><a href="#">1</a></li>
+				<li><a href="#">1</a></li>
+				<li><a href="#">1</a></li>
+				<li><a href="#">1</a></li>
+				<li><a href="#">1</a></li>
+				<li><a href="#">1</a></li>-->
+			</ul>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	/*
+	 * jsonp格式接口
+		接口路径：https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="+tex+"&cb=fn
+		wd参数值为用户搜索的数据值
+		cd为callback回调函数
+	 * 
+	 * 
+	 */
+	
+	var baidu = document.getElementById("baidu");
+	var oul = document.getElementById("oul");
+	
+	baidu.onkeyup = function(){
+		oul.style.display = "block";
+		var sc = document.createElement("script");
+		document.body.appendChild(sc);
+		sc.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="+this.value+"&cb=box"
+		
+	};
+	function box(res){
+		var arr = res.s;
+		var str = ""
+		for (var i = 0; i < arr.length; i++) {
+			str += `
+				<li><a href="https://www.baidu.com/s?wd=${arr[i]}">${arr[i]}</a></li>
+			`;
+		}
+		oul.innerHTML = str;
+	}
+	
+</script>
