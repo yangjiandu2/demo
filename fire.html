@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<script>
+		
+
+	</script>
+	<style>
+		.container{
+			width: 80%;
+			height: 600px;
+			border: 2px solid red;
+			background: #000;
+			margin:20px auto;
+			cursor: pointer;
+			position: relative;
+			left: 0;
+			top: 0;
+			overflow: hidden;
+		}
+		.fire{
+			width: 10px;
+			height:10px;
+			position: absolute;
+			bottom: 0;
+		}
+		.small-fire{
+			width: 10px;
+			height: 10px;
+			position: absolute;
+			border-radius: 50%;
+		}
+	</style>
+
+</head>
+<body>
+	
+	<div class="container">
+		
+	</div>
+
+</body>
+<script>
+	//1.点击container
+	//2.创建一个烟花
+	//3.给烟花定位到点击的最下方
+	//4.烟花的移动
+	//5.烟花移动到点击的位置时消失
+	//6.小烟花创建，定位当前点击的位置
+	//7.小烟花移动。
+	//8.移动到目标位置消失。
+	window.onload = function(){
+		new PlayFire();
+	}
+	
+	function PlayFire(){
+		this.container = document.getElementsByClassName("container")[0];
+		//初始化烟花功能；
+		this.init();
+	}
+	PlayFire.prototype.init = function(){
+		//console.log(this.container);
+		this.click();
+	};
+	PlayFire.prototype.click = function(){
+		var _this = this;
+		this.container.onclick = function(e){
+			var e = e || event;
+			_this.x = e.offsetX;
+			_this.y = e.offsetY;
+			//创建一个烟花
+			_this.createFire();
+		}
+	}
+	//创建一个烟花
+	PlayFire.prototype.createFire = function(){
+		//console.log(this.x,this.y);
+		this.fire = document.createElement("div");
+		//把烟花添加到页面中
+		this.container.appendChild(this.fire);
+		//添加class类
+		this.fire.className = "fire";
+		this.fire.style.background = "red";
+		//给烟花定位到点击的最下方
+		this.fire.style.left = this.x - this.fire.offsetWidth/2 + "px";
+		//烟花的移动
+		this.fireMove(this.fire);
+	}
+	//烟花的移动
+	PlayFire.prototype.fireMove = function(fire){
+		//var _this = this;
+		animate({
+			ele:fire,
+			param:{
+				top:this.y
+			},
+			speedTime:20
+		},function(){
+			//console.log(this);
+			//烟花移动到点击的位置时消失
+			fire.remove();
+			this.fireBomb();
+		}.bind(this));
+	}
+	PlayFire.prototype.fireBomb = function(){
+		//小烟花创建
+		var randR = getRand(50,200);
+		for (let i = 0; i < 20; i++) {
+			//r*Math.cos(deg*Math.PI/180)
+			//r*Math.sin(deg*Math.PI/180)
+//			var l = getRand(0,this.container.offsetWidth);
+//			var t = getRand(0,this.container.offsetHeight);
+			let smallFire = document.createElement("div");
+			this.container.appendChild(smallFire);
+			//添加class类
+			smallFire.className = "small-fire";
+			smallFire.style.left = this.x - smallFire.offsetWidth/2 + "px";
+			smallFire.style.top = this.y - smallFire.offsetHeight/2  + "px";
+			smallFire.style.background = getColor();
+			
+			let l = this.x + parseInt(randR*Math.cos(i*18*Math.PI/180));
+			let t = this.y - parseInt(randR*Math.sin(i*18*Math.PI/180));
+			
+			animate({
+				ele:smallFire,
+				param:{
+					left:l,
+					top:t
+				}
+			},function(){
+				smallFire.remove();
+			})
+		}
+		//定位当前点击的位置
+		//小烟花移动。
+		//移动到目标位置消失。
+	}
+	/*---------------------------------*/
+	
+
+/*-----------------------------------分割线---------------------------------*/
+/*
+ * 增加了链式运动
+ * 
+ * 
+ * */
+
+
+	function animate(obj, fn) { // 2 ，减少了参数接收个数，让函数使用更方便
+	
+	if(typeof obj.speedTime == "undefined"){// 3.对时间毫秒数的处理 调用值可传可不传
+		obj.speedTime=30;
+	}else if(obj.speedTime == "slow"){
+		obj.speedTime=40;
+	}else if(obj.speedTime == "quockly"){
+		obj.speedTime=20;
+	}else if(obj.speedTime == "fast"){
+		obj.speedTime=10;
+	}
+
+		clearInterval(obj.ele.timer);
+		obj.ele.timer = setInterval(function() {
+		var flag=true;//所有都到达目标值
+		for(var arrKey in obj.param){//把样式和目标值整合
+			//obj.param[key]目标值target
+			//arrKey:attr
+		var current = 0;
+		if(arrKey == "opacity") {
+			current = getStyle(obj.ele, arrKey)* 100;
+		} else {
+			current = parseInt(getStyle(obj.ele, arrKey));
+		}
+			var speed = (obj.param[arrKey] - current) / 10;
+			speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+			console.log(parseInt(getStyle(obj.ele, arrKey)), obj.param[arrKey] - current);
+			if(current != obj.param[arrKey]) { //1. 当前值等于目标值
+				flag=false;
+		}
+		if(arrKey == "opacity") {//透明度的赋值
+			obj.ele.style[arrKey] = (current + speed) / 100;
+		}else if(arrKey == "zIndex"){//层次的赋值
+			obj.ele.style[arrKey] =obj.param[arrKey];
+		}else {//其他样式的赋值
+			obj.ele.style[arrKey] = current + speed + "px";
+		}
+		
+		}		
+		if(flag){//清除定时器
+			clearInterval(obj.ele.timer)
+			if(typeof fn != "undefined") {
+				fn();
+			}
+		}
+	}, obj.speedTime)
+}
+ 
+ 
+ 	//跨浏览器计算物体宽度
+    function getStyle(ele,attr) {
+        return window.getComputedStyle ? window.getComputedStyle(ele)[attr] : ele.currentStyle[attr];
+    }
+/*-------------*/
+	//获取ID
+function $id(id){
+ 			return document.getElementById(id);
+ 		}
+
+//随机数
+function getRand(minNum,maxNum){
+return parseInt(Math.random()*(maxNum-minNum)+1)+minNum;
+}
+
+//随机获取颜色
+function getColor(){
+	var str = "0123456789abcdef";
+	var color = "#";
+	var rand = 0;
+	for (var i = 0; i < 6; i++) {
+		rand = getRand(0,15);
+		color += str[rand];
+	}
+	return color;
+}
+	
+</script>
+
+</html>	
